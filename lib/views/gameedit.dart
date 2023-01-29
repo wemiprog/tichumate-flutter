@@ -10,7 +10,9 @@ class GameEditView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameViewArguments args = ModalRoute.of(context).settings.arguments;
-    return _GameEditView(gameId: args.gameId);
+    return _GameEditView(
+      gameId: args.gameId,
+    );
   }
 }
 
@@ -19,8 +21,7 @@ class _GameEditView extends StatefulWidget {
 
   _GameEditView({
     required this.gameId,
-    Key key,
-  }) : super(key: key);
+  }) : super();
 
   @override
   _GameEditViewState createState() => _GameEditViewState(gameId: gameId);
@@ -140,14 +141,14 @@ class _GameEditViewState extends State<_GameEditView> {
           child: Container(
             height: 56,
             child: Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
-              FlatButton(
-                textColor: Theme.of(context).accentColor,
+              TextButton(
+                textColor: Theme.of(context).colorScheme.secondary,
                 child: Text(
                     FlutterI18n.translate(context, 'ui.cancel').toUpperCase()),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               Spacer(),
-              FlatButton(
+              TextButton(
                 textColor: Colors.green[500],
                 child: Text(
                     FlutterI18n.translate(context, 'ui.save').toUpperCase()),

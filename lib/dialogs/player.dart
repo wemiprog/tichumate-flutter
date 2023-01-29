@@ -30,14 +30,14 @@ class PlayerDialog {
         content:
             Text(FlutterI18n.translate(context, 'ui.this_cannot_be_undone')),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child:
                 Text(FlutterI18n.translate(context, 'ui.cancel').toUpperCase()),
             onPressed: () {
               Navigator.of(context).pop(false);
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text(
               FlutterI18n.translate(context, 'ui.delete').toUpperCase(),
               style: TextStyle(color: Colors.red[500]),
@@ -211,14 +211,15 @@ class _PlayerFormState extends State<_PlayerForm> {
         ButtonTheme.bar(
             child: ButtonBar(
           children: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
                 FlutterI18n.translate(context, 'ui.cancel').toUpperCase(),
-                style: TextStyle(color: Theme.of(context).accentColor),
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
               ),
               onPressed: () => Navigator.of(context).pop(null),
             ),
-            FlatButton(
+            TextButton(
               child: Text(
                 FlutterI18n.translate(context, 'ui.save').toUpperCase(),
                 style: TextStyle(color: Colors.greenAccent[400]),

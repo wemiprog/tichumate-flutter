@@ -178,7 +178,7 @@ class RoundManager {
     return score1.win == 2 || score2.win == 2;
   }
 
-  void win1({bool doubleWin: false}) {
+  void win1({bool doubleWin = false}) {
     if (doubleWin && score1.win != 2) {
       score1.win = 2;
     } else {
@@ -193,7 +193,7 @@ class RoundManager {
     }
   }
 
-  void win2({bool doubleWin: false}) {
+  void win2({bool doubleWin = false}) {
     if (doubleWin && score2.win != 2) {
       score2.win = 2;
     } else {
@@ -340,7 +340,7 @@ class RoundScoreData {
     required this.score,
     required this.accumulatedScore,
     required this.calls,
-    this.win: false,
-    this.doubleWin: false,
+    this.win = false,
+    this.doubleWin = false,
   });
 }

@@ -46,7 +46,7 @@ class SettingsView extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 4),
                     child: RaisedButton(
                       child: Text('GitHub'),
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                       textColor: Colors.black,
                       onPressed: () => _launchURL(
                           'https://github.com/sevhauser/tichumate-flutter'),
@@ -55,7 +55,7 @@ class SettingsView extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 4),
                     child: RaisedButton(
                       child: Text('E-Mail'),
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                       textColor: Colors.black,
                       onPressed: () => _launchURL(
                           'mailto:tiltedch@gmail.com?subject=TichuMate Feedback'),

@@ -29,8 +29,7 @@ class RoundView extends StatelessWidget {
 class _RoundViewContent extends StatefulWidget {
   final int gameId, roundId;
 
-  _RoundViewContent({required this.gameId, this.roundId, Key key})
-      : super(key: key);
+  _RoundViewContent({required this.gameId, this.roundId}) : super();
 
   @override
   _RoundViewContentState createState() => _RoundViewContentState();
@@ -69,7 +68,7 @@ class _RoundViewContentState extends State<_RoundViewContent> {
                 content: Text(FlutterI18n.translate(
                     context, 'round.please_select_a_winner')),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     child: Text(
                         FlutterI18n.translate(context, 'ui.ok').toUpperCase()),
                     onPressed: () => Navigator.of(context).pop(),
@@ -97,13 +96,13 @@ class _RoundViewContentState extends State<_RoundViewContent> {
       builder: (context) => AlertDialog(
         title: Text('Leave?'),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child: const Text('Cancel'),
             onPressed: () {
               Navigator.of(context).pop(false);
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text(
               'Yes',
             ),
@@ -227,7 +226,8 @@ class _RoundViewContentState extends State<_RoundViewContent> {
                                 child: SliderTheme(
                                   key: UniqueKey(),
                                   data: SliderTheme.of(context).copyWith(
-                                    thumbColor: Theme.of(context).accentColor,
+                                    thumbColor:
+                                        Theme.of(context).colorScheme.secondary,
                                     activeTrackColor: Colors.grey[700],
                                     inactiveTrackColor: Colors.grey[700],
                                     inactiveTickMarkColor: Colors.transparent,
@@ -342,8 +342,7 @@ class _TichuWinButton extends StatelessWidget {
     required this.active,
     required this.label,
     required this.onPressed,
-    Key key,
-  }) : super(key: key);
+  }) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -351,7 +350,7 @@ class _TichuWinButton extends StatelessWidget {
       active: active,
       label: label,
       onPressed: onPressed,
-      activeColor: Theme.of(context).accentColor,
+      activeColor: Theme.of(context).colorScheme.secondary,
     );
   }
 }
@@ -369,8 +368,7 @@ class _TichuToggleButton extends StatelessWidget {
     required this.active,
     required this.onPressed,
     required this.type,
-    Key key,
-  }) : super(key: key);
+  }) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -402,12 +400,11 @@ class _TichuButton extends StatelessWidget {
     required this.activeColor,
     required this.onPressed,
     required this.label,
-    Key key,
-  }) : super(key: key);
+  }) : super();
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       child: Text(label,
           style: TextStyle(
               color: active ? activeColor : Colors.grey[500], fontSize: 15)),
@@ -420,8 +417,7 @@ class _TichuInputRow extends StatelessWidget {
   final List<Widget> children;
   final String label;
 
-  _TichuInputRow({required this.children, required this.label, Key key})
-      : super(key: key);
+  _TichuInputRow({required this.children, required this.label}) : super();
 
   @override
   Widget build(BuildContext context) {

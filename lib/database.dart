@@ -306,7 +306,7 @@ abstract class TichuRepo<E extends TichuModel> {
     return model;
   }
 
-  Future<E> insert(E model, {bool notifyChange: true}) async {
+  Future<E> insert(E model, {bool notifyChange = true}) async {
     int id = await db.insert(table, model.toMap());
     model.id = id;
     if (notifyChange) {
@@ -315,7 +315,7 @@ abstract class TichuRepo<E extends TichuModel> {
     return model;
   }
 
-  Future<E> update(E model, {bool notifyChange: true}) async {
+  Future<E> update(E model, {bool notifyChange = true}) async {
     await db
         .update(table, model.toMap(), where: 'id = ?', whereArgs: [model.id]);
     if (notifyChange) {
@@ -360,7 +360,7 @@ abstract class TichuRepo<E extends TichuModel> {
     return await _populateList(result);
   }
 
-  Future<bool> deleteFromId(int id, {bool notifyChange: true}) async {
+  Future<bool> deleteFromId(int id, {bool notifyChange = true}) async {
     var result = await db.delete(table, where: 'id = ?', whereArgs: [id]);
     if (notifyChange) {
       await onDataChange();
@@ -417,14 +417,14 @@ class PlayerRepository extends TichuRepo<Player> {
   }
 
   @override
-  Future<Player> update(Player player, {bool notifyChange: true}) async {
+  Future<Player> update(Player player, {bool notifyChange = true}) async {
     var result = await super.update(player, notifyChange: notifyChange);
     await repos.games.onDataChange();
     return result;
   }
 
   @override
-  Future<bool> deleteFromId(int id, {bool notifyChange: true}) async {
+  Future<bool> deleteFromId(int id, {bool notifyChange = true}) async {
     await repos.teams.purgePlayer(id);
     await repos.calls.purgePlayer(id);
     var result = await super.deleteFromId(id);
@@ -510,7 +510,7 @@ class TeamRepository extends TichuRepo<Team> {
   }
 
   Future _insertPlayers(int teamId, List<int> playerIds,
-      {bool clearExisting: false}) async {
+      {bool clearExisting = false}) async {
     if (clearExisting) {
       await db.delete(TichuTable.teamPlayers,
           where: 'team_id = ?', whereArgs: [teamId]);
@@ -538,21 +538,21 @@ class TeamRepository extends TichuRepo<Team> {
   }
 
   @override
-  Future<Team> insert(Team team, {bool notifyChange: true}) async {
+  Future<Team> insert(Team team, {bool notifyChange = true}) async {
     var result = await super.insert(team, notifyChange: notifyChange);
     await _insertPlayers(result.id, result.playerIds);
     return result;
   }
 
   @override
-  Future<Team> update(Team team, {bool notifyChange: true}) async {
+  Future<Team> update(Team team, {bool notifyChange = true}) async {
     var result = await super.update(team, notifyChange: notifyChange);
     await _insertPlayers(result.id, result.playerIds, clearExisting: true);
     return team;
   }
 
   @override
-  Future<bool> deleteFromId(int id, {bool notifyChange: true}) async {
+  Future<bool> deleteFromId(int id, {bool notifyChange = true}) async {
     await db
         .delete(TichuTable.teamPlayers, where: 'team_id = ?', whereArgs: [id]);
     return await super.deleteFromId(id, notifyChange: notifyChange);
@@ -616,7 +616,7 @@ class GameRepository extends TichuRepo<Game> {
   }
 
   @override
-  Future<Game> update(Game game, {bool notifyChange: true}) async {
+  Future<Game> update(Game game, {bool notifyChange = true}) async {
     await super.update(game, notifyChange: false);
     await repos.gameTeams.update(game.team1);
     await repos.gameTeams.update(game.team2);
@@ -625,7 +625,7 @@ class GameRepository extends TichuRepo<Game> {
   }
 
   @override
-  Future<bool> deleteFromId(int id, {bool notifyChange: true}) async {
+  Future<bool> deleteFromId(int id, {bool notifyChange = true}) async {
     await repos.gameTeams.purgeGame(id);
     await repos.rounds.purgeGame(id);
     return await super.deleteFromId(id, notifyChange: notifyChange);
@@ -664,7 +664,7 @@ class GameTeamRepository extends TichuRepo<GameTeam> {
   }
 
   @override
-  Future<GameTeam> update(GameTeam team, {bool notifyChange: true}) async {
+  Future<GameTeam> update(GameTeam team, {bool notifyChange = true}) async {
     var result = await super.update(team, notifyChange: false);
     await repos.teams.update(result.team);
     onDataChange();
@@ -679,7 +679,7 @@ class GameTeamRepository extends TichuRepo<GameTeam> {
   }
 
   @override
-  Future<bool> deleteFromId(int id, {bool notifyChange: true}) async {
+  Future<bool> deleteFromId(int id, {bool notifyChange = true}) async {
     var gameTeam = await getFromId(id);
     await repos.teams.deleteFromId(gameTeam.teamId);
     return await super.deleteFromId(id, notifyChange: notifyChange);
@@ -711,7 +711,7 @@ class RoundRepository extends TichuRepo<Round> {
   }
 
   @override
-  Future<Round> insert(Round round, {bool notifyChange: true}) async {
+  Future<Round> insert(Round round, {bool notifyChange = true}) async {
     var newRound = await super.insert(round);
     for (int i in newRound.scores.keys) {
       newRound.scores[i].roundId = newRound.id;
@@ -721,7 +721,7 @@ class RoundRepository extends TichuRepo<Round> {
   }
 
   @override
-  Future<Round> update(Round round, {bool notifyChange: true}) async {
+  Future<Round> update(Round round, {bool notifyChange = true}) async {
     var updatedRound = await super.update(round, notifyChange: false);
     await repos.scores.purgeRound(round.id);
     for (int i in updatedRound.scores.keys) {
@@ -746,7 +746,7 @@ class RoundRepository extends TichuRepo<Round> {
   }
 
   @override
-  Future<bool> deleteFromId(int id, {bool notifyChange: true}) async {
+  Future<bool> deleteFromId(int id, {bool notifyChange = true}) async {
     await repos.scores.purgeRound(id);
     return await super.deleteFromId(id, notifyChange: notifyChange);
   }
@@ -773,7 +773,7 @@ class ScoreRepository extends TichuRepo<Score> {
   }
 
   @override
-  Future<Score> insert(Score score, {bool notifyChange: true}) async {
+  Future<Score> insert(Score score, {bool notifyChange = true}) async {
     var newScore = await super.insert(score);
     for (var i = 0; i < score.calls.length; i++) {
       newScore.calls[i].scoreId = newScore.id;
@@ -791,7 +791,7 @@ class ScoreRepository extends TichuRepo<Score> {
   }
 
   @override
-  Future<bool> deleteFromId(int id, {bool notifyChange: true}) async {
+  Future<bool> deleteFromId(int id, {bool notifyChange = true}) async {
     await repos.calls.purgeScore(id);
     return await super.deleteFromId(id, notifyChange: notifyChange);
   }

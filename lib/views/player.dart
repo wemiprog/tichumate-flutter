@@ -110,13 +110,13 @@ class _PlayerViewContentState extends State<_PlayerViewContent> {
                                     context, 'player.statistics.won')
                                 .toUpperCase(),
                             value: _statistics.gamesWon.toString(),
-                            color: Colors.green[500]),
+                            color: Color.fromARGB(255, 76, 175, 80)),
                         _DataRowItem(
                             label: FlutterI18n.translate(
                                     context, 'player.statistics.lost')
                                 .toUpperCase(),
                             value: _statistics.gamesLost.toString(),
-                            color: Colors.red[500]),
+                            color: Color.fromARGB(255, 244, 67, 54)),
                       ]),
                   Divider(),
                   _DataRow(
@@ -134,20 +134,20 @@ class _PlayerViewContentState extends State<_PlayerViewContent> {
                                   context, 'player.statistics.won')
                               .toUpperCase(),
                           value: _statistics.roundsWon.toString(),
-                          color: Colors.green[500],
+                          color: Color.fromARGB(255, 76, 175, 80),
                         ),
                         _DataRowItem(
                             label: FlutterI18n.translate(
                                     context, 'player.statistics.double_win')
                                 .toUpperCase(),
                             value: _statistics.roundsDoubleWon.toString(),
-                            color: Theme.of(context).accentColor),
+                            color: Theme.of(context).colorScheme.secondary),
                         _DataRowItem(
                             label: FlutterI18n.translate(
                                     context, 'player.statistics.lost')
                                 .toUpperCase(),
                             value: _statistics.roundsLost.toString(),
-                            color: Colors.red[500]),
+                            color: Color.fromRGBO(244, 67, 54, 1)),
                       ]),
                   Divider(),
                 ],
@@ -232,6 +232,6 @@ class _DataRowItem {
   _DataRowItem({
     required this.label,
     required this.value,
-    this.color: Colors.white,
+    this.color = Colors.white,
   });
 }

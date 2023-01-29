@@ -8,7 +8,7 @@ class GameHeaderSlot {
   List<Player> players;
   GameHeaderSlotStatus status;
   int score;
-  int difference;
+  int? difference;
 
   GameHeaderSlot({
     required this.teamName,
@@ -52,8 +52,7 @@ class GameSummary extends StatelessWidget {
     required this.slots,
     this.compact = false,
     this.showDifference = false,
-    Key key,
-  }) : super(key: key);
+  }) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +147,7 @@ class GameSummary extends StatelessWidget {
                   children: playerNames,
                 )))));
       }
-      int diff = slots[i].difference == null ? 0 : slots[i].difference;
+      int diff = slots[i].difference ?? 0;
       difference.add(Expanded(
           child: Text(
         diff <= 0 ? '' : '+${diff.toString()}',
@@ -192,8 +191,7 @@ class GameHeader extends StatelessWidget {
   GameHeader({
     required this.slots,
     this.showDifference = false,
-    Key key,
-  }) : super(key: key);
+  }) : super();
 
   @override
   Widget build(BuildContext context) {

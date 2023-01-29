@@ -28,14 +28,14 @@ class _NewGameViewState extends State<NewGameView> {
       builder: (context) => AlertDialog(
         title: Text(FlutterI18n.translate(context, 'game.quit_new_game')),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child:
                 Text(FlutterI18n.translate(context, 'ui.cancel').toUpperCase()),
             onPressed: () {
               Navigator.of(context).pop(false);
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text(
               FlutterI18n.translate(context, 'ui.ok').toUpperCase(),
             ),
@@ -170,33 +170,39 @@ class _NewGameViewState extends State<NewGameView> {
                   child: Row(
                     children: <Widget>[
                       _currentStep == 0
-                          ? FlatButton(
+                          ? TextButton(
                               child: Text(
                                   FlutterI18n.translate(context, 'ui.cancel')
                                       .toUpperCase(),
                                   style: TextStyle(
-                                      color: Theme.of(context).accentColor)),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary)),
                               onPressed: () => _cancel(),
                             )
-                          : FlatButton(
+                          : TextButton(
                               child: Text(
                                   FlutterI18n.translate(context, 'ui.back')
                                       .toUpperCase(),
                                   style: TextStyle(
-                                      color: Theme.of(context).accentColor)),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary)),
                               onPressed: () => _prevStep(),
                             ),
                       Spacer(),
                       _currentStep < _lastStep
-                          ? FlatButton(
+                          ? TextButton(
                               child: Text(
                                   FlutterI18n.translate(context, 'ui.next')
                                       .toUpperCase(),
                                   style: TextStyle(
-                                      color: Theme.of(context).accentColor)),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary)),
                               onPressed: () => _nextStep(),
                             )
-                          : FlatButton(
+                          : TextButton(
                               child: Text(
                                   FlutterI18n.translate(
                                           context, 'game.start_game')

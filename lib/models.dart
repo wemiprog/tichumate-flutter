@@ -246,7 +246,7 @@ class Call extends TichuModel {
   Call();
 
   Call.fromValues(
-      {this.scoreId, this.playerId, Tichu tichu, this.success: false}) {
+      {this.scoreId, this.playerId, Tichu tichu, this.success = false}) {
     tichuId = tichu.id;
     wager = tichu.value;
   }

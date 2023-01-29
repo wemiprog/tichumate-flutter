@@ -24,14 +24,14 @@ class TichuDialog {
         builder: (context) => AlertDialog(
               title: Text(FlutterI18n.translate(context, 'tichu.delete_tichu')),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                   child: Text(FlutterI18n.translate(context, 'ui.cancel')
                       .toUpperCase()),
                   onPressed: () {
                     Navigator.of(context).pop(false);
                   },
                 ),
-                FlatButton(
+                TextButton(
                   child: Text(
                     FlutterI18n.translate(context, 'ui.delete').toUpperCase(),
                     style: TextStyle(color: Colors.red[500]),
@@ -151,14 +151,15 @@ class _TichuFormState extends State<_TichuForm> {
         ButtonTheme.bar(
           child: ButtonBar(
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text(
                   FlutterI18n.translate(context, 'ui.cancel').toUpperCase(),
-                  style: TextStyle(color: Theme.of(context).accentColor),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
                 onPressed: () => Navigator.of(context).pop(null),
               ),
-              FlatButton(
+              TextButton(
                 child: Text(
                   FlutterI18n.translate(context, 'ui.save').toUpperCase(),
                   style: TextStyle(color: Colors.greenAccent[400]),

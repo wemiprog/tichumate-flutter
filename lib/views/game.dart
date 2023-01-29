@@ -28,8 +28,7 @@ class _GameViewContent extends StatefulWidget {
   final int gameId;
   _GameViewContent({
     required this.gameId,
-    Key key,
-  }) : super(key: key);
+  }) : super();
 
   @override
   _GameViewContentState createState() => _GameViewContentState();
@@ -98,14 +97,14 @@ class _GameViewContentState extends State<_GameViewContent> with RouteAware {
       builder: (context) => AlertDialog(
         title: Text(FlutterI18n.translate(context, 'game.delete_game')),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             child:
                 Text(FlutterI18n.translate(context, 'ui.cancel').toUpperCase()),
             onPressed: () {
               Navigator.of(context).pop(false);
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text(
                 FlutterI18n.translate(context, 'ui.delete').toUpperCase(),
                 style: TextStyle(color: Colors.red[500])),
@@ -265,7 +264,7 @@ class _RoundListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: key,
+      key: Key('dm'),
       confirmDismiss: (direction) {
         if (direction == _edit) {
           this.onEdit();
@@ -325,7 +324,7 @@ class _ScoreSummary extends StatelessWidget {
 
   _ScoreSummary({
     required this.score,
-    this.reversed: false,
+    this.reversed = false,
   });
 
   @override
@@ -342,7 +341,8 @@ class _ScoreSummary extends StatelessWidget {
     var winColumn = Container(
         child: Text(
       win,
-      style: TextStyle(fontSize: 20, color: Theme.of(context).accentColor),
+      style: TextStyle(
+          fontSize: 20, color: Theme.of(context).colorScheme.secondary),
     ));
     var callsColumn = <Widget>[];
     score.calls.forEach((call) {
@@ -383,8 +383,7 @@ class _GameStatistics extends StatefulWidget {
 
   _GameStatistics({
     required this.gameManager,
-    Key key,
-  }) : super(key: key);
+  }) : super();
 
   @override
   _GameStatisticsState createState() => _GameStatisticsState();
@@ -392,7 +391,7 @@ class _GameStatistics extends StatefulWidget {
 
 class _GameStatisticsState extends State<_GameStatistics> {
   GameManager get _m => widget.gameManager;
-  GameStatisticsProvider _sp;
+  late GameStatisticsProvider _sp;
   @override
   void initState() {
     super.initState();
@@ -447,8 +446,8 @@ class _ScoreChartCard extends StatelessWidget {
             statisticsProvider.statistics.values.first,
             statisticsProvider.statistics.values.last,
           ],
-          team1Color: Colors.tealAccent[400],
-          team2Color: Colors.red[500],
+          team1Color: Color.fromRGBO(29, 233, 182, 1),
+          team2Color: Color.fromRGBO(244, 67, 54, 1),
         ),
       ],
     );
@@ -458,11 +457,12 @@ class _ScoreChartCard extends StatelessWidget {
 class _ScoreChart extends StatefulWidget {
   final List<TeamStatistics> statistics;
   final Color team1Color, team2Color;
-  final int winScore;
+  final int? winScore;
   _ScoreChart(
       {required this.statistics,
       required this.team1Color,
       required this.team2Color,
+      // ignore: unused_element
       this.winScore});
 
   @override
@@ -489,7 +489,7 @@ class __ScoreChartState extends State<_ScoreChart> {
   void _onChanged(charts.SelectionModel model) {
     int index = 0;
     if (model.selectedDatum.isNotEmpty) {
-      index = model.selectedDatum.first.index;
+      index = model.selectedDatum.first.index ?? 1;
     }
     try {
       setState(() {
@@ -542,13 +542,15 @@ class __ScoreChartState extends State<_ScoreChart> {
           style: TextStyle(
               fontFamily: 'RobotoMono',
               fontSize: 24,
-              color: data.win ? Theme.of(context).accentColor : Colors.white),
+              color: data.win
+                  ? Theme.of(context).colorScheme.secondary
+                  : Colors.white),
         ))));
     Color scoreColor;
     if (data.score > 0) {
-      scoreColor = Colors.green[300];
+      scoreColor = Color.fromRGBO(129, 199, 132, 1);
     } else if (data.score < 0) {
-      scoreColor = Colors.red[300];
+      scoreColor = Color.fromRGBO(229, 115, 115, 1);
     } else {
       scoreColor = Colors.white;
     }

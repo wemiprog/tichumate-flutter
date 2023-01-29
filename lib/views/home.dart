@@ -15,16 +15,18 @@ class HomeData extends InheritedWidget {
   final List<Game> games;
   final List<Tichu> tichus;
 
-  HomeData({
-    required this.players,
-    required this.games,
-    required this.tichus,
-    required this.playersChange,
-    required this.gamesChange,
-    required this.tichusChange,
-    required Widget child,
-    Key key,
-  }) : super(child: child, key: key);
+  HomeData(
+      {required this.players,
+      required this.games,
+      required this.tichus,
+      required this.playersChange,
+      required this.gamesChange,
+      required this.tichusChange,
+      required Widget child,
+      required})
+      : super(
+          child: child,
+        );
 
   @override
   bool updateShouldNotify(HomeData old) {
@@ -41,7 +43,7 @@ class HomeData extends InheritedWidget {
 
 class HomeView extends StatefulWidget {
   final int initialIndex;
-  const HomeView({Key key, this.initialIndex: 1}) : super(key: key);
+  const HomeView({this.initialIndex = 1}) : super();
 
   @override
   _HomeViewState createState() => _HomeViewState(initialIndex);
