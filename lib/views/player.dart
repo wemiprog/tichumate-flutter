@@ -230,8 +230,8 @@ class _DataRowItem {
   final Color color;
 
   _DataRowItem({
-    @required this.label,
-    @required this.value,
+    required this.label,
+    required this.value,
     this.color: Colors.white,
   });
 }

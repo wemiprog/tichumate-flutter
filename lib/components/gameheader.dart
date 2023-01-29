@@ -11,11 +11,11 @@ class GameHeaderSlot {
   int difference;
 
   GameHeaderSlot({
-    @required this.teamName,
-    @required this.players,
-    @required this.score,
+    required this.teamName,
+    required this.players,
+    required this.score,
     this.difference,
-    this.status: GameHeaderSlotStatus.neutral,
+    this.status = GameHeaderSlotStatus.neutral,
   });
 }
 
@@ -30,7 +30,7 @@ class GameSummary extends StatelessWidget {
 
     switch (status) {
       case GameHeaderSlotStatus.accent:
-        color = Theme.of(context).accentColor;
+        color = Theme.of(context).colorScheme.secondary;
         break;
       case GameHeaderSlotStatus.danger:
         color = Colors.red[500];
@@ -49,9 +49,9 @@ class GameSummary extends StatelessWidget {
   }
 
   GameSummary({
-    @required this.slots,
-    this.compact: false,
-    this.showDifference: false,
+    required this.slots,
+    this.compact = false,
+    this.showDifference = false,
     Key key,
   }) : super(key: key);
 
@@ -190,8 +190,8 @@ class GameHeader extends StatelessWidget {
       const TextStyle(fontFamily: 'RobotoSlab', fontSize: 32);
 
   GameHeader({
-    @required this.slots,
-    this.showDifference: false,
+    required this.slots,
+    this.showDifference = false,
     Key key,
   }) : super(key: key);
 
@@ -215,7 +215,7 @@ class _GameSummaryPlayer extends StatelessWidget {
   final Player player;
   final bool compact;
 
-  _GameSummaryPlayer({@required this.player, this.compact: false});
+  _GameSummaryPlayer({required this.player, this.compact = false});
 
   @override
   Widget build(BuildContext context) {

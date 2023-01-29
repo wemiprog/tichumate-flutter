@@ -16,13 +16,13 @@ class HomeData extends InheritedWidget {
   final List<Tichu> tichus;
 
   HomeData({
-    @required this.players,
-    @required this.games,
-    @required this.tichus,
-    @required this.playersChange,
-    @required this.gamesChange,
-    @required this.tichusChange,
-    @required Widget child,
+    required this.players,
+    required this.games,
+    required this.tichus,
+    required this.playersChange,
+    required this.gamesChange,
+    required this.tichusChange,
+    required Widget child,
     Key key,
   }) : super(child: child, key: key);
 

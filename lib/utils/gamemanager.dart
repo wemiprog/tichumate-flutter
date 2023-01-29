@@ -21,7 +21,7 @@ class GameManager {
   int get team1Difference => team1.score - team2.score;
   int get team2Difference => team2.score - team1.score;
 
-  GameManager({@required this.gameId}) {
+  GameManager({required this.gameId}) {
     _db = TichuDB();
   }
 
@@ -125,9 +125,9 @@ class RoundManager {
   int _scoreDistribution;
 
   RoundManager({
-    @required this.gameManager,
-    @required this.game,
-    @required this.round,
+    required his.gameManager,
+    required this.game,
+    required this.round,
   }) {
     if (newRound || hasDoubleWin) {
       _scoreDistribution = _baseScoreDistribution;
@@ -255,7 +255,7 @@ class GameStatisticsProvider {
   GameManager get _m => gameManager;
 
   GameStatisticsProvider({
-    @required this.gameManager,
+    required this.gameManager,
   });
 
   void generateData() {
@@ -303,7 +303,7 @@ class TeamStatistics {
   List<int> accumulatedRoundScores = [0];
 
   TeamStatistics({
-    @required this.team,
+    required this.team,
   });
 
   void addRoundScore(Score score) {
@@ -336,10 +336,10 @@ class RoundScoreData {
   final List<Call> calls;
 
   RoundScoreData({
-    @required this.roundNumber,
-    @required this.score,
-    @required this.accumulatedScore,
-    @required this.calls,
+    required this.roundNumber,
+    required this.score,
+    required this.accumulatedScore,
+    required this.calls,
     this.win: false,
     this.doubleWin: false,
   });

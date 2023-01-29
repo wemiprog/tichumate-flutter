@@ -10,7 +10,7 @@ class RoundViewArguments {
   int gameId;
   int roundId;
   RoundViewArguments({
-    @required this.gameId,
+    required this.gameId,
     this.roundId,
   });
 }
@@ -29,7 +29,7 @@ class RoundView extends StatelessWidget {
 class _RoundViewContent extends StatefulWidget {
   final int gameId, roundId;
 
-  _RoundViewContent({@required this.gameId, this.roundId, Key key})
+  _RoundViewContent({required this.gameId, this.roundId, Key key})
       : super(key: key);
 
   @override
@@ -339,9 +339,9 @@ class _TichuWinButton extends StatelessWidget {
   final _TichuButtonCallback onPressed;
 
   _TichuWinButton({
-    @required this.active,
-    @required this.label,
-    @required this.onPressed,
+    required this.active,
+    required this.label,
+    required this.onPressed,
     Key key,
   }) : super(key: key);
 
@@ -365,10 +365,10 @@ class _TichuToggleButton extends StatelessWidget {
   final _TichuToggleButtonType type;
 
   _TichuToggleButton({
-    @required this.label,
-    @required this.active,
-    @required this.onPressed,
-    @required this.type,
+    required this.label,
+    required this.active,
+    required this.onPressed,
+    required this.type,
     Key key,
   }) : super(key: key);
 
@@ -398,10 +398,10 @@ class _TichuButton extends StatelessWidget {
   final _TichuButtonCallback onPressed;
   final String label;
   _TichuButton({
-    @required this.active,
-    @required this.activeColor,
-    @required this.onPressed,
-    @required this.label,
+    required this.active,
+    required this.activeColor,
+    required this.onPressed,
+    required this.label,
     Key key,
   }) : super(key: key);
 
@@ -420,7 +420,7 @@ class _TichuInputRow extends StatelessWidget {
   final List<Widget> children;
   final String label;
 
-  _TichuInputRow({@required this.children, @required this.label, Key key})
+  _TichuInputRow({required this.children, required this.label, Key key})
       : super(key: key);
 
   @override

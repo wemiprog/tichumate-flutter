@@ -11,14 +11,13 @@ class TeamForm extends StatelessWidget {
   final List<Player> secondaryPlayers;
   final Team team;
 
-  TeamForm(
-      {@required this.formKey,
-      @required this.team,
-      @required this.teamNameCallback,
-      @required this.playersCallback,
-      this.secondaryPlayers,
-      Key key})
-      : super(key: key);
+  TeamForm({
+    required this.formKey,
+    required this.team,
+    required this.teamNameCallback,
+    required this.playersCallback,
+    required this.secondaryPlayers,
+  }) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,7 @@ class TeamPlayersSelect extends FormField<List<Player>> {
     FormFieldSetter<List<Player>> onSaved,
     List<Player> initialValue,
     List<Player> secondaryPlayers,
-    @required BuildContext context,
+    required BuildContext context,
   }) : super(
             onSaved: onSaved,
             initialValue: initialValue,

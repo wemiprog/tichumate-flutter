@@ -11,7 +11,7 @@ import 'package:tichumate/views/round.dart';
 
 class GameViewArguments {
   final int gameId;
-  GameViewArguments({@required this.gameId});
+  GameViewArguments({required this.gameId});
 }
 
 class GameView extends StatelessWidget {
@@ -27,7 +27,7 @@ enum _GameOptions { edit, delete }
 class _GameViewContent extends StatefulWidget {
   final int gameId;
   _GameViewContent({
-    @required this.gameId,
+    required this.gameId,
     Key key,
   }) : super(key: key);
 
@@ -255,12 +255,12 @@ class _RoundListTile extends StatelessWidget {
   final int roundNumber;
 
   _RoundListTile({
-    @required this.key,
-    @required this.confirmDelete,
-    @required this.onDelete,
-    @required this.onEdit,
-    @required this.round,
-    @required this.roundNumber,
+    required this.key,
+    required this.confirmDelete,
+    required this.onDelete,
+    required this.onEdit,
+    required this.round,
+    required this.roundNumber,
   });
   @override
   Widget build(BuildContext context) {
@@ -324,7 +324,7 @@ class _ScoreSummary extends StatelessWidget {
   final bool reversed;
 
   _ScoreSummary({
-    @required this.score,
+    required this.score,
     this.reversed: false,
   });
 
@@ -382,7 +382,7 @@ class _GameStatistics extends StatefulWidget {
   final GameManager gameManager;
 
   _GameStatistics({
-    @required this.gameManager,
+    required this.gameManager,
     Key key,
   }) : super(key: key);
 
@@ -428,7 +428,7 @@ class _GameStatisticsState extends State<_GameStatistics> {
 class _ScoreChartCard extends StatelessWidget {
   final GameStatisticsProvider statisticsProvider;
   _ScoreChartCard({
-    @required this.statisticsProvider,
+    required this.statisticsProvider,
   });
 
   @override
@@ -460,9 +460,9 @@ class _ScoreChart extends StatefulWidget {
   final Color team1Color, team2Color;
   final int winScore;
   _ScoreChart(
-      {@required this.statistics,
-      @required this.team1Color,
-      @required this.team2Color,
+      {required this.statistics,
+      required this.team1Color,
+      required this.team2Color,
       this.winScore});
 
   @override

@@ -18,7 +18,7 @@ class _GameEditView extends StatefulWidget {
   final int gameId;
 
   _GameEditView({
-    @required this.gameId,
+    required this.gameId,
     Key key,
   }) : super(key: key);
 
@@ -35,7 +35,7 @@ class _GameEditViewState extends State<_GameEditView> {
   GameManager _gm;
 
   _GameEditViewState({
-    @required this.gameId,
+    required this.gameId,
   });
 
   @override
