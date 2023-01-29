@@ -1,6 +1,7 @@
 name: tichumate
 description: Manage your Tichu games!
 
+
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
 # followed by an optional build number separated by a +.
@@ -13,8 +14,8 @@ description: Manage your Tichu games!
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 0.2.0+3
 
-authors:
-  - Severin Hauser <tiltedch@gmail.com>
+#authors:
+#  - Severin Hauser <tiltedch@gmail.com>
 
 homepage: https://github.com/sevhauser/tichumate-flutter
 

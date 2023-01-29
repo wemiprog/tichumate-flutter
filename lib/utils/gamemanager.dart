@@ -5,13 +5,13 @@ import 'package:tichumate/models.dart';
 
 class GameManager {
   int gameId;
-  Game game;
-  List<Round> rounds;
+  late Game game;
+  late List<Round> rounds;
   bool initialized = false;
-  TichuDB _db;
+  late TichuDB _db;
 
-  int get team1Id => game.team1.id;
-  int get team2Id => game.team2.id;
+  int get team1Id => game.team1.id as int;
+  int get team2Id => game.team2.id as int;
   GameTeam get team1 => game.team1;
   GameTeam get team2 => game.team2;
 
@@ -27,7 +27,7 @@ class GameManager {
 
   Future<void> init() async {
     game = await _db.games.getFromId(gameId);
-    rounds = await _db.rounds.getFromGameId(game.id);
+    rounds = await _db.rounds.getFromGameId(game.id as int);
   }
 
   GameHeaderSlotStatus _teamStatus(GameTeam team) {
@@ -79,7 +79,7 @@ class GameManager {
   Future<void> removeRound(int roundId) async {
     var roundIndex = rounds.indexWhere((round) => round.id == roundId);
     if (roundIndex < 0) return;
-    await _db.rounds.deleteFromId(rounds[roundIndex].id);
+    await _db.rounds.deleteFromId(rounds[roundIndex].id as int);
     rounds.removeAt(roundIndex);
     await save();
   }
@@ -98,9 +98,9 @@ class GameManager {
     await save();
   }
 
-  RoundManager roundManager({int roundId}) {
+  RoundManager roundManager({int? roundId}) {
     if (roundId == null) {
-      var round = Round.forGame(game.id);
+      var round = Round.forGame(game.id as int);
       round.scores[team1Id] = Score.forGameTeam(team1Id);
       round.scores[team2Id] = Score.forGameTeam(team2Id);
       return RoundManager(gameManager: this, game: game, round: round);
@@ -118,28 +118,28 @@ class GameManager {
 
 class RoundManager {
   GameManager gameManager;
-  int gameId, roundId;
+  late int gameId, roundId;
   final int _baseScoreDistribution = 0;
   Round round;
   Game game;
-  int _scoreDistribution;
+  late int _scoreDistribution;
 
   RoundManager({
-    required his.gameManager,
+    required this.gameManager,
     required this.game,
     required this.round,
   }) {
     if (newRound || hasDoubleWin) {
       _scoreDistribution = _baseScoreDistribution;
     } else {
-      _scoreDistribution = 50 - round.scores[team1Id].cardPoints;
+      _scoreDistribution = 50 - (round.scores[team1Id]?.cardPoints ?? 0);
     }
   }
 
   bool get newRound => round.id == null;
 
-  int get team1Id => game.team1.id;
-  int get team2Id => game.team2.id;
+  int get team1Id => game.team1.id as int;
+  int get team2Id => game.team2.id as int;
   GameTeam get team1 => game.team1;
   GameTeam get team2 => game.team2;
 
@@ -226,15 +226,15 @@ class RoundManager {
     }
   }
 
-  Call team1CallInfo(int tichuId, bool success) {
+  Call? team1CallInfo(int tichuId, bool success) {
     return _callInfo(score1.calls, tichuId, success);
   }
 
-  Call team2CallInfo(int tichuId, bool success) {
+  Call? team2CallInfo(int tichuId, bool success) {
     return _callInfo(score2.calls, tichuId, success);
   }
 
-  Call _callInfo(List<Call> calls, int tichuId, bool success) {
+  Call? _callInfo(List<Call> calls, int tichuId, bool success) {
     var index = calls.indexWhere(
         (call) => call.tichuId == tichuId && call.success == success);
     if (index >= 0) {

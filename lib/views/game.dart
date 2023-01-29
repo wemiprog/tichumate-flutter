@@ -17,7 +17,8 @@ class GameViewArguments {
 class GameView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final GameViewArguments args = ModalRoute.of(context).settings.arguments;
+    final GameViewArguments args =
+        ModalRoute.of(context)?.settings.arguments as GameViewArguments;
     return _GameViewContent(gameId: args.gameId);
   }
 }
@@ -35,8 +36,8 @@ class _GameViewContent extends StatefulWidget {
 }
 
 class _GameViewContentState extends State<_GameViewContent> with RouteAware {
-  int _gameId;
-  GameManager _gm;
+  late int _gameId;
+  late GameManager _gm;
   bool _loaded = false;
 
   @override
@@ -49,7 +50,7 @@ class _GameViewContentState extends State<_GameViewContent> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    routeObserver.subscribe(this, ModalRoute.of(context));
+    routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
   }
 
   @override

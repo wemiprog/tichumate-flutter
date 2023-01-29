@@ -43,15 +43,15 @@ class TeamForm extends StatelessWidget {
 }
 
 class TeamPlayersSelect extends FormField<List<Player>> {
-  static List<Player> _addPlayerToList(List<Player> list, Player player) {
-    list.add(player);
+  static List<Player>? _addPlayerToList(List<Player>? list, Player player) {
+    list?.add(player);
     return list;
   }
 
   TeamPlayersSelect({
-    FormFieldSetter<List<Player>> onSaved,
-    List<Player> initialValue,
-    List<Player> secondaryPlayers,
+    required FormFieldSetter<List<Player>> onSaved,
+    required List<Player> initialValue,
+    required List<Player> secondaryPlayers,
     required BuildContext context,
   }) : super(
             onSaved: onSaved,
@@ -71,18 +71,18 @@ class TeamPlayersSelect extends FormField<List<Player>> {
                                       context, 'player.players')),
                               child: Wrap(
                                 spacing: 5,
-                                children: state.value.isEmpty
+                                children: state.value?.isEmpty ?? true
                                     ? [
                                         Text(FlutterI18n.translate(
                                             context, 'player.no_players'))
                                       ]
-                                    : state.value
+                                    : state.value!
                                         .map((player) => Chip(
                                               avatar: Text(player.icon),
                                               label: Text(player.name),
                                               onDeleted: () => state.didChange(
                                                   state
-                                                      .value
+                                                      .value!
                                                       .where((item) =>
                                                           item != player)
                                                       .toList()),
@@ -95,17 +95,15 @@ class TeamPlayersSelect extends FormField<List<Player>> {
                           child: IconButton(
                               icon: Icon(Icons.add_circle),
                               onPressed: () async {
-                                var result = await PlayerDialog(context)
-                                    .selectPlayer(state.value,
+                                Player result = await PlayerDialog(context)
+                                    .selectPlayer(state.value ?? [Player()],
                                         secondary: secondaryPlayers);
-                                if (result is Player && result.id == null) {
+                                if (result.id == null) {
                                   result =
                                       await PlayerDialog(context).newPlayer();
                                 }
-                                if (result != null) {
-                                  state.didChange(
-                                      _addPlayerToList(state.value, result));
-                                }
+                                state.didChange(
+                                    _addPlayerToList(state.value, result));
                               }),
                         ),
                       ],

@@ -4,7 +4,7 @@ import 'package:tichumate/models.dart';
 class PlayerStatistics {
   final _db = TichuDB();
   final int playerId;
-  Player player;
+  late Player player;
   List<Team> teams = [];
   List<GameTeam> gameTeams = [];
   List<Game> games = [];
@@ -43,9 +43,9 @@ class PlayerStatistics {
       gamesLost += game.finished && !gt.win ? 1 : 0;
       games.add(game);
 
-      var rounds = await _db.rounds.getFromGameId(game.id);
+      var rounds = await _db.rounds.getFromGameId(game.id as int);
       rounds.forEach((r) {
-        var score = r.score(gt.id);
+        var score = r.score(gt.id as int);
         scores.add(score);
         roundsPlayed += 1;
         roundsWon += score.win > 0 ? 1 : 0;

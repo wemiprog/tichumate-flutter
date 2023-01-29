@@ -210,15 +210,15 @@ class TichuDB {
   static final TichuDB _instance = TichuDB._internal();
   bool initialized = false;
   bool testing = false;
-  Database _db, db;
-  PlayerRepository _players;
-  TichuRepository _tichus;
-  TeamRepository _teams;
-  GameRepository _games;
-  GameTeamRepository _gameTeams;
-  RoundRepository _rounds;
-  ScoreRepository _scores;
-  CallRepository _calls;
+  late Database _db, db;
+  late PlayerRepository _players;
+  late TichuRepository _tichus;
+  late TeamRepository _teams;
+  late GameRepository _games;
+  late GameTeamRepository _gameTeams;
+  late RoundRepository _rounds;
+  late ScoreRepository _scores;
+  late CallRepository _calls;
 
   TichuDB._internal();
 
@@ -333,14 +333,14 @@ abstract class TichuRepo<E extends TichuModel> {
     return await _populate(result);
   }
 
-  Future<List<E>> getFromIds(List<dynamic> ids, {String orderBy}) async {
+  Future<List<E>> getFromIds(List<dynamic> ids, {String? orderBy}) async {
     List<Future<E>> query = [];
     ids.forEach((id) => query.add(getFromId(id)));
     var result = await Future.wait(query);
     return await _populateList(result);
   }
 
-  Future<List<E>> getAll({String orderBy}) async {
+  Future<List<E>> getAll({String? orderBy}) async {
     var result = <E>[];
     var query = await db.query(table, orderBy: orderBy);
     query.forEach((element) {
@@ -350,7 +350,7 @@ abstract class TichuRepo<E extends TichuModel> {
   }
 
   Future<List<E>> getWhere(
-      {String where, List<dynamic> whereArgs, orderBy}) async {
+      {String? where, List<dynamic>? whereArgs, orderBy}) async {
     var result = <E>[];
     var query = await db.query(table,
         where: where, whereArgs: whereArgs, orderBy: orderBy);
@@ -390,7 +390,7 @@ class PlayerRepository extends TichuRepo<Player> {
     players = await getAll(orderBy: 'name COLLATE NOCASE ASC');
   }
 
-  Player getFromCache(int id) {
+  Player? getFromCache(int id) {
     var cacheIndex = players.indexWhere((player) => player.id == id);
     if (cacheIndex >= 0) {
       return players[cacheIndex];
@@ -408,7 +408,7 @@ class PlayerRepository extends TichuRepo<Player> {
   }
 
   @override
-  Future<List<Player>> getFromIds(List<dynamic> ids, {String orderBy}) async {
+  Future<List<Player>> getFromIds(List<dynamic> ids, {String? orderBy}) async {
     var result = <Player>[];
     for (var i = 0; i < ids.length; i++) {
       result.add(await getFromId(ids[i]));
@@ -457,7 +457,7 @@ class TichuRepository extends TichuRepo<Tichu> {
     return Tichu.fromMap(map);
   }
 
-  Tichu getFromCache(int id) {
+  Tichu? getFromCache(int id) {
     var cachedIndex = cachedAllTichus.indexWhere((tichu) => tichu.id == id);
     if (cachedIndex >= 0) {
       return cachedAllTichus[cachedIndex];
@@ -475,7 +475,7 @@ class TichuRepository extends TichuRepo<Tichu> {
   }
 
   @override
-  Future<List<Tichu>> getFromIds(List<dynamic> ids, {String orderBy}) async {
+  Future<List<Tichu>> getFromIds(List<dynamic> ids, {String? orderBy}) async {
     var result = <Tichu>[];
     for (var i = 0; i < ids.length; i++) {
       result.add(await getFromId(ids[i]));
@@ -504,7 +504,7 @@ class TeamRepository extends TichuRepo<Team> {
     if (query.isEmpty) return result;
 
     for (var res in query) {
-      result.add(await getFromId(res['team_id']));
+      result.add(await getFromId(res['team_id'] as int));
     }
     return result;
   }
@@ -533,21 +533,22 @@ class TeamRepository extends TichuRepo<Team> {
   @override
   Future<Team> _populate(Team team) async {
     var result = team;
-    team.players = await _players(team.id);
+    team.players = await _players(team.id as int);
     return result;
   }
 
   @override
   Future<Team> insert(Team team, {bool notifyChange = true}) async {
     var result = await super.insert(team, notifyChange: notifyChange);
-    await _insertPlayers(result.id, result.playerIds);
+    await _insertPlayers(result.id as int, result.playerIds);
     return result;
   }
 
   @override
   Future<Team> update(Team team, {bool notifyChange = true}) async {
     var result = await super.update(team, notifyChange: notifyChange);
-    await _insertPlayers(result.id, result.playerIds, clearExisting: true);
+    await _insertPlayers(result.id as int, result.playerIds,
+        clearExisting: true);
     return team;
   }
 
@@ -593,7 +594,7 @@ class GameRepository extends TichuRepo<Game> {
 
   @override
   Future<Game> _populate(Game game) async {
-    var teams = await repos.gameTeams.getFromGameId(game.id);
+    var teams = await repos.gameTeams.getFromGameId(game.id as int);
     assert(teams.length == 2);
     game.team1 = teams[0];
     game.team2 = teams[1];
@@ -658,8 +659,8 @@ class GameTeamRepository extends TichuRepo<GameTeam> {
 
   Future<GameTeam> create(Game game, Team team) async {
     var gameTeam = GameTeam()
-      ..gameId = game.id
-      ..teamId = team.id;
+      ..gameId = game.id as int
+      ..teamId = team.id as int;
     return await insert(gameTeam);
   }
 
@@ -674,7 +675,7 @@ class GameTeamRepository extends TichuRepo<GameTeam> {
   Future<void> purgeGame(int id) async {
     var query = await db.query(table, where: 'game_id = ?', whereArgs: [id]);
     for (var gameTeam in query) {
-      await deleteFromId(gameTeam['id']);
+      await deleteFromId(gameTeam['id'] as int);
     }
   }
 
@@ -714,8 +715,9 @@ class RoundRepository extends TichuRepo<Round> {
   Future<Round> insert(Round round, {bool notifyChange = true}) async {
     var newRound = await super.insert(round);
     for (int i in newRound.scores.keys) {
-      newRound.scores[i].roundId = newRound.id;
-      newRound.scores[i] = await repos.scores.insert(newRound.scores[i]);
+      newRound.scores[i]?.roundId = newRound.id as int;
+      newRound.scores[i] =
+          await repos.scores.insert(newRound.scores[i] as Score);
     }
     return newRound;
   }
@@ -723,11 +725,11 @@ class RoundRepository extends TichuRepo<Round> {
   @override
   Future<Round> update(Round round, {bool notifyChange = true}) async {
     var updatedRound = await super.update(round, notifyChange: false);
-    await repos.scores.purgeRound(round.id);
+    await repos.scores.purgeRound(round.id as int);
     for (int i in updatedRound.scores.keys) {
-      updatedRound.scores[i].roundId = updatedRound.id;
+      updatedRound.scores[i]?.roundId = updatedRound.id as int;
       updatedRound.scores[i] =
-          await repos.scores.insert(updatedRound.scores[i]);
+          await repos.scores.insert(updatedRound.scores[i] as Score);
     }
     await onDataChange();
     return updatedRound;
@@ -741,7 +743,7 @@ class RoundRepository extends TichuRepo<Round> {
     var query =
         await db.query(table, where: 'game_id = ?', whereArgs: [gameId]);
     for (var round in query) {
-      await deleteFromId(round['id']);
+      await deleteFromId(round['id'] as int);
     }
   }
 
@@ -760,7 +762,7 @@ class ScoreRepository extends TichuRepo<Score> {
   @override
   Future<Score> _populate(Score score) async {
     var result = score;
-    result.calls = await repos.calls.getFromScoreId(score.id);
+    result.calls = await repos.calls.getFromScoreId(score.id as int);
     return result;
   }
 
@@ -786,7 +788,7 @@ class ScoreRepository extends TichuRepo<Score> {
     var query =
         await db.query(table, where: 'round_id = ?', whereArgs: [roundId]);
     for (var score in query) {
-      await deleteFromId(score['id']);
+      await deleteFromId(score['id'] as int);
     }
   }
 
@@ -827,7 +829,7 @@ class CallRepository extends TichuRepo<Call> {
     var query =
         await db.query(table, where: 'score_id = ?', whereArgs: [scoreId]);
     for (var call in query) {
-      await deleteFromId(call['id']);
+      await deleteFromId(call['id'] as int);
     }
   }
 }

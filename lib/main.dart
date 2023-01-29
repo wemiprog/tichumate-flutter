@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
           routeObserver
         ],
         localizationsDelegates: [
-          FlutterI18nDelegate(useCountryCode: false, fallbackFile: 'en'),
+          FlutterI18nDelegate(),
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate
         ]);

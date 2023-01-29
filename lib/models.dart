@@ -1,5 +1,5 @@
 abstract class TichuModel {
-  int id;
+  int? id;
 
   TichuModel({this.id});
 
@@ -9,7 +9,7 @@ abstract class TichuModel {
 }
 
 class Player extends TichuModel {
-  int id;
+  int? id;
   String name = '';
   String icon = '\u{1f600}';
 
@@ -32,7 +32,7 @@ class Player extends TichuModel {
 }
 
 class Tichu extends TichuModel {
-  int id;
+  int? id;
   String title = '';
   String lang = '';
   int value = 0;
@@ -66,7 +66,7 @@ class Tichu extends TichuModel {
 }
 
 class Team extends TichuModel {
-  int id;
+  int? id;
   String name = '';
   List<Player> players = [];
 
@@ -85,7 +85,7 @@ class Team extends TichuModel {
   }
 
   List<int> get playerIds {
-    return players.map((player) => player.id).toList();
+    return players.map((player) => player.id ?? 0).toList();
   }
 }
 
@@ -95,11 +95,11 @@ class GameRules {
 }
 
 class Game extends TichuModel {
-  int id;
+  int? id;
   DateTime createdOn = DateTime.now();
   String rule = GameRules.score;
   int winScore = 1000;
-  GameTeam team1, team2;
+  late GameTeam team1, team2;
 
   bool get finished => team1.win || team2.win;
 
@@ -127,12 +127,12 @@ class Game extends TichuModel {
 }
 
 class GameTeam extends TichuModel {
-  int id;
-  int gameId;
-  int teamId;
+  int? id;
+  late int gameId;
+  late int teamId;
   int score = 0;
   bool win = false;
-  Team team;
+  late Team team;
 
   String get name => team.name;
   List<Player> get players => team.players;
@@ -159,8 +159,8 @@ class GameTeam extends TichuModel {
 }
 
 class Round extends TichuModel {
-  int id;
-  int gameId;
+  int? id;
+  late int gameId;
 
   Map<int, Score> scores = {};
 
@@ -174,7 +174,7 @@ class Round extends TichuModel {
   }
 
   Score score(int gameTeamId) {
-    return scores[gameTeamId];
+    return scores[gameTeamId] as Score;
   }
 
   bool hasWinner() {
@@ -196,9 +196,9 @@ class Round extends TichuModel {
 }
 
 class Score extends TichuModel {
-  int id;
-  int roundId;
-  int gameTeamId;
+  int? id;
+  late int roundId;
+  late int gameTeamId;
   int win = 0;
   int cardPoints = 50;
 
@@ -236,17 +236,20 @@ class Score extends TichuModel {
 }
 
 class Call extends TichuModel {
-  int id;
-  int scoreId;
-  int playerId;
-  int tichuId;
-  int wager;
+  int? id;
+  late int? scoreId;
+  int? playerId;
+  late int? tichuId;
+  late int wager;
   bool success = false;
 
   Call();
 
   Call.fromValues(
-      {this.scoreId, this.playerId, Tichu tichu, this.success = false}) {
+      {this.scoreId,
+      this.playerId,
+      required Tichu tichu,
+      this.success = false}) {
     tichuId = tichu.id;
     wager = tichu.value;
   }

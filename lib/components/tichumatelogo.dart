@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TichuMateLogo extends StatelessWidget {
-  final double width, height;
+  final double? width, height;
   TichuMateLogo({this.width, this.height});
 
   @override
