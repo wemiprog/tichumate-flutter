@@ -9,7 +9,8 @@ import 'package:tichumate/utils/playerstatistics.dart';
 class PlayerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> args = ModalRoute.of(context).settings.arguments;
+    final Map<String, dynamic> args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
     return _PlayerViewContent(args['playerId']);
   }
 }
@@ -26,8 +27,8 @@ class _PlayerViewContentState extends State<_PlayerViewContent> {
   final int playerId;
   bool _loaded = false;
   bool _hasPlayer = true;
-  Player _player;
-  PlayerStatistics _statistics;
+  late Player _player;
+  late PlayerStatistics _statistics;
 
   _PlayerViewContentState(this.playerId) : super();
 

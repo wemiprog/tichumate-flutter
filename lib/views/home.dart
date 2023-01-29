@@ -37,7 +37,7 @@ class HomeData extends InheritedWidget {
   }
 
   static HomeData of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(HomeData) as HomeData;
+    return context.getElementForInheritedWidgetOfExactType() as HomeData;
   }
 }
 
@@ -59,7 +59,7 @@ class _HomeViewState extends State<HomeView>
 
   _HomeViewState(this.initialIndex) : super();
 
-  TabController _tabController;
+  late TabController _tabController;
 
   @override
   void initState() {
@@ -134,7 +134,7 @@ class _GamesTab extends StatelessWidget {
   List<Widget> _gamesList(BuildContext context) {
     var list = <Widget>[];
     var dateFormatter = DateFormat.yMMMMd();
-    String currentDate;
+    late String currentDate;
     var games = HomeData.of(context).games;
     games.forEach((item) {
       if (currentDate != dateFormatter.format(item.createdOn)) {
@@ -146,8 +146,8 @@ class _GamesTab extends StatelessWidget {
         ));
       }
       list.add(InkWell(
-        onTap: () => Navigator.of(context)
-            .pushNamed('/game', arguments: GameViewArguments(gameId: item.id)),
+        onTap: () => Navigator.of(context).pushNamed('/game',
+            arguments: GameViewArguments(gameId: item.id as int)),
         child: GameSummary(
           compact: true,
           slots: <GameHeaderSlot>[
@@ -262,7 +262,7 @@ class _CustomizeTab extends StatelessWidget {
   void _deleteTichu(BuildContext context, int id) async {
     var result = await TichuDialog(context).deleteTichu(id);
     if (result) {
-      Scaffold.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(FlutterI18n.translate(context, 'tichu.tichu_deleted')),
         duration: Duration(seconds: 1),
       ));
@@ -279,17 +279,17 @@ class _CustomizeTab extends StatelessWidget {
       }
       tichus.add(ListTile(
         title: Text(title),
-        subtitle: Text(FlutterI18n.translate(
-            context, 'tichu.x_points', {'x': item.value.toString()})),
+        subtitle: Text(FlutterI18n.translate(context, 'tichu.x_points',
+            translationParams: {'x': item.value.toString()})),
         leading: item.protected ? Icon(Icons.lock) : Text(''),
         trailing: item.protected
             ? Text('')
             : PopupMenuButton(
                 onSelected: (_TichuOptions result) {
                   if (result == _TichuOptions.edit) {
-                    TichuDialog(context).editTichu(item.id);
+                    TichuDialog(context).editTichu(item.id as int);
                   } else if (result == _TichuOptions.delete) {
-                    _deleteTichu(context, item.id);
+                    _deleteTichu(context, item.id as int);
                   }
                 },
                 itemBuilder: (context) => <PopupMenuEntry<_TichuOptions>>[

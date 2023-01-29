@@ -44,19 +44,25 @@ class SettingsView extends StatelessWidget {
               Row(children: [
                 Container(
                     padding: EdgeInsets.symmetric(horizontal: 4),
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       child: Text('GitHub'),
-                      color: Theme.of(context).colorScheme.secondary,
-                      textColor: Colors.black,
+                      style: ButtonStyle(
+                        foregroundColor: MaterialStatePropertyAll(Colors.black),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.secondary),
+                      ),
                       onPressed: () => _launchURL(
                           'https://github.com/sevhauser/tichumate-flutter'),
                     )),
                 Container(
                     padding: EdgeInsets.symmetric(horizontal: 4),
-                    child: RaisedButton(
+                    child: ElevatedButton(
                       child: Text('E-Mail'),
-                      color: Theme.of(context).colorScheme.secondary,
-                      textColor: Colors.black,
+                      style: ButtonStyle(
+                        foregroundColor: MaterialStatePropertyAll(Colors.black),
+                        backgroundColor: MaterialStatePropertyAll(
+                            Theme.of(context).colorScheme.secondary),
+                      ),
                       onPressed: () => _launchURL(
                           'mailto:tiltedch@gmail.com?subject=TichuMate Feedback'),
                     )),
@@ -70,7 +76,8 @@ class SettingsView extends StatelessWidget {
               width: 40,
             ),
             applicationVersion: FlutterI18n.translate(
-                context, 'about.version_x', {'version': '0.1.0'}),
+                context, 'about.version_x',
+                translationParams: {'version': '0.1.0'}),
             applicationLegalese: 'Copyright 2019 Severin Hauser\n\n'
                 'Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n'
                 'The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\n'

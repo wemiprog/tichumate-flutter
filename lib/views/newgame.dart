@@ -24,32 +24,33 @@ class _NewGameViewState extends State<NewGameView> {
 
   Future<bool> _cancelDialog() async {
     return await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(FlutterI18n.translate(context, 'game.quit_new_game')),
-        actions: <Widget>[
-          TextButton(
-            child:
-                Text(FlutterI18n.translate(context, 'ui.cancel').toUpperCase()),
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(FlutterI18n.translate(context, 'game.quit_new_game')),
+            actions: <Widget>[
+              TextButton(
+                child: Text(
+                    FlutterI18n.translate(context, 'ui.cancel').toUpperCase()),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+              TextButton(
+                child: Text(
+                  FlutterI18n.translate(context, 'ui.ok').toUpperCase(),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+              ),
+            ],
           ),
-          TextButton(
-            child: Text(
-              FlutterI18n.translate(context, 'ui.ok').toUpperCase(),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-          ),
-        ],
-      ),
-    );
+        ) ??
+        false;
   }
 
   void _cancel() async {
-    if (await _cancelDialog()) {
+    if (await _cancelDialog() ?? true) {
       Navigator.of(context).pop();
     }
   }
@@ -57,13 +58,13 @@ class _NewGameViewState extends State<NewGameView> {
   bool _saveCurrentForm() {
     if (_currentStep == 0) {
       final form = _team1FormKey.currentState;
-      form.save();
+      form?.save();
     } else if (_currentStep == 1) {
       final form = _team2FormKey.currentState;
-      form.save();
+      form?.save();
     } else if (_currentStep == 2) {
       final form = _gameFormKey.currentState;
-      if (form.validate()) {
+      if (form!.validate()) {
         form.save();
         return true;
       }
@@ -85,7 +86,7 @@ class _NewGameViewState extends State<NewGameView> {
     if (!_saveCurrentForm()) return;
     var newGame = await TichuDB().games.create(_game, _team1, _team2);
     Navigator.of(context).pushReplacementNamed('/game',
-        arguments: GameViewArguments(gameId: newGame.id));
+        arguments: GameViewArguments(gameId: newGame.id as int));
   }
 
   void _nextStep() {
@@ -122,9 +123,10 @@ class _NewGameViewState extends State<NewGameView> {
                       content: TeamForm(
                         formKey: _team1FormKey,
                         team: _team1,
-                        teamNameCallback: (name) => _team1.name = name,
+                        teamNameCallback: (name) =>
+                            _team1.name = name as String,
                         playersCallback: (players) {
-                          _team1.players = players;
+                          _team1.players = players as List<Player>;
                         },
                         secondaryPlayers: _team2.players,
                       ),
@@ -136,9 +138,10 @@ class _NewGameViewState extends State<NewGameView> {
                         content: TeamForm(
                           formKey: _team2FormKey,
                           team: _team2,
-                          teamNameCallback: (name) => _team2.name = name,
+                          teamNameCallback: (name) =>
+                              _team2.name = name as String,
                           playersCallback: (players) =>
-                              _team2.players = players,
+                              _team2.players = players as List<Player>,
                           secondaryPlayers: _team1.players,
                         )),
                     Step(
@@ -150,18 +153,16 @@ class _NewGameViewState extends State<NewGameView> {
                           child: GameForm(
                             game: _game,
                             formKey: _gameFormKey,
-                            ruleCallback: (rule) => _game.rule = rule,
-                            winScoreCallback: (score) => _game.winScore = score,
+                            ruleCallback: (rule) => _game.rule = rule as String,
+                            winScoreCallback: (score) =>
+                                _game.winScore = score as int,
                           )),
                     ),
                   ],
                   onStepCancel: () => _prevStep(),
                   onStepContinue: () => _nextStep(),
                   onStepTapped: _setStep,
-                  controlsBuilder: (context,
-                          {VoidCallback onStepContinue,
-                          VoidCallback onStepCancel}) =>
-                      Container(),
+                  controlsBuilder: (context, details) => Container(),
                 )),
             bottomNavigationBar: BottomAppBar(
                 color: Theme.of(context).primaryColor,

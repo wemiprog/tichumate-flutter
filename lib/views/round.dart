@@ -8,7 +8,7 @@ import 'package:tichumate/utils/gamemanager.dart';
 
 class RoundViewArguments {
   int gameId;
-  int roundId;
+  int? roundId;
   RoundViewArguments({
     required this.gameId,
     this.roundId,
@@ -18,7 +18,8 @@ class RoundViewArguments {
 class RoundView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    RoundViewArguments args = ModalRoute.of(context).settings.arguments;
+    RoundViewArguments args =
+        ModalRoute.of(context)?.settings.arguments as RoundViewArguments;
     return _RoundViewContent(
       gameId: args.gameId,
       roundId: args.roundId,
@@ -27,7 +28,8 @@ class RoundView extends StatelessWidget {
 }
 
 class _RoundViewContent extends StatefulWidget {
-  final int gameId, roundId;
+  final int gameId;
+  late int? roundId;
 
   _RoundViewContent({required this.gameId, this.roundId}) : super();
 
@@ -36,10 +38,11 @@ class _RoundViewContent extends StatefulWidget {
 }
 
 class _RoundViewContentState extends State<_RoundViewContent> {
-  int _gameId, _roundId;
+  late int _gameId;
+  int? _roundId;
   bool _loaded = false, _hasChanged = false;
-  GameManager _gm;
-  RoundManager _m;
+  late GameManager _gm;
+  late RoundManager _m;
 
   @override
   void initState() {
@@ -92,27 +95,28 @@ class _RoundViewContentState extends State<_RoundViewContent> {
       return true;
     }
     return await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Leave?'),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Leave?'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+              TextButton(
+                child: Text(
+                  'Yes',
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+              ),
+            ],
           ),
-          TextButton(
-            child: Text(
-              'Yes',
-            ),
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-          ),
-        ],
-      ),
-    );
+        ) ??
+        true;
   }
 
   List<Widget> _tichus(BuildContext context) {
@@ -126,7 +130,7 @@ class _RoundViewContentState extends State<_RoundViewContent> {
         label: title.toUpperCase(),
         children: <Widget>[
           _TichuToggleButton(
-            active: _m.team1CallInfo(tichu.id, true) != null,
+            active: _m.team1CallInfo(tichu.id as int, true) != null,
             label:
                 FlutterI18n.translate(context, 'round.success').toUpperCase(),
             onPressed: () => setState(() {
@@ -141,7 +145,7 @@ class _RoundViewContentState extends State<_RoundViewContent> {
             type: _TichuToggleButtonType.good,
           ),
           _TichuToggleButton(
-            active: _m.team1CallInfo(tichu.id, false) != null,
+            active: _m.team1CallInfo(tichu.id as int, false) != null,
             label: FlutterI18n.translate(context, 'round.fail').toUpperCase(),
             onPressed: () => setState(() {
               _m.teamCall(
@@ -155,7 +159,7 @@ class _RoundViewContentState extends State<_RoundViewContent> {
             type: _TichuToggleButtonType.bad,
           ),
           _TichuToggleButton(
-            active: _m.team2CallInfo(tichu.id, false) != null,
+            active: _m.team2CallInfo(tichu.id as int, false) != null,
             label: FlutterI18n.translate(context, 'round.fail').toUpperCase(),
             onPressed: () => setState(() {
               _m.teamCall(
@@ -169,7 +173,7 @@ class _RoundViewContentState extends State<_RoundViewContent> {
             type: _TichuToggleButtonType.bad,
           ),
           _TichuToggleButton(
-            active: _m.team2CallInfo(tichu.id, true) != null,
+            active: _m.team2CallInfo(tichu.id as int, true) != null,
             label:
                 FlutterI18n.translate(context, 'round.success').toUpperCase(),
             onPressed: () => setState(() {
