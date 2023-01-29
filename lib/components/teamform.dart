@@ -95,15 +95,15 @@ class TeamPlayersSelect extends FormField<List<Player>> {
                           child: IconButton(
                               icon: Icon(Icons.add_circle),
                               onPressed: () async {
-                                Player result = await PlayerDialog(context)
+                                Player? result = await PlayerDialog(context)
                                     .selectPlayer(state.value ?? [Player()],
                                         secondary: secondaryPlayers);
-                                if (result.id == null) {
-                                  result =
-                                      await PlayerDialog(context).newPlayer();
+                                if (result?.id == null) {
+                                  result = await PlayerDialog(context)
+                                      .newPlayer() as Player;
                                 }
-                                state.didChange(
-                                    _addPlayerToList(state.value, result));
+                                state.didChange(_addPlayerToList(
+                                    state.value, result as Player));
                               }),
                         ),
                       ],

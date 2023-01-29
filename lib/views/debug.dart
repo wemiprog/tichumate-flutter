@@ -10,7 +10,7 @@ class DataDebugView extends StatefulWidget {
 class _DataDebugViewContent extends State<DataDebugView> {
   TichuDB _db = TichuDB();
   String display = TichuTable.player;
-  DataTable table;
+  late DataTable table;
   bool _loaded = false;
 
   @override
@@ -19,20 +19,21 @@ class _DataDebugViewContent extends State<DataDebugView> {
     _loadDisplay();
   }
 
-  void _setDisplay(String value) {
-    display = value;
+  void _setDisplay(String? value) {
+    display = value ?? '';
     _loadDisplay();
   }
 
   Future<void> _loadDisplay() async {
     var query = await _db.db.query(display);
     var columns = TichuTable.columns[display]
-        .map((el) => DataColumn(label: Text(el)))
-        .toList();
+            ?.map((el) => DataColumn(label: Text(el)))
+            .toList() ??
+        [];
     var rows = <DataRow>[];
     query.forEach((q) {
       var cells = <DataCell>[];
-      TichuTable.columns[display].forEach((c) {
+      TichuTable.columns[display]?.forEach((c) {
         cells.add(DataCell(Text(q[c].toString())));
       });
       rows.add(DataRow(

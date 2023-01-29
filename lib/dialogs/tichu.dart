@@ -7,7 +7,7 @@ class TichuDialog {
   final BuildContext context;
   TichuDialog(this.context);
 
-  Future<Tichu> createTichu() async {
+  Future<Tichu?> createTichu() async {
     var newTichu = await _showEditDialog(Tichu());
     return newTichu.id == null ? null : newTichu;
   }
@@ -42,7 +42,7 @@ class TichuDialog {
                 ),
               ],
             ));
-    if (shouldDelete) {
+    if (shouldDelete ?? false) {
       return await TichuDB().tichus.deleteFromId(id);
     }
     return false;
@@ -80,8 +80,8 @@ class _TichuFormState extends State<_TichuForm> {
 
   void _save() {
     final form = _formKey.currentState;
-    if (form.validate()) {
-      form.save();
+    if (form?.validate() ?? false) {
+      form!.save();
       Navigator.of(context).pop(tichu);
     }
   }
@@ -114,26 +114,24 @@ class _TichuFormState extends State<_TichuForm> {
                           FlutterI18n.translate(context, 'tichu.tichu_name')),
                   initialValue: tichu.title ?? '',
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value?.isEmpty ?? true) {
                       return FlutterI18n.translate(
                           context, 'ui.errors.provide_name');
                     }
                     return null;
                   },
-                  onSaved: (val) => setState(() => tichu.title = val),
+                  onSaved: (val) => setState(() => tichu.title = val as String),
                 ),
                 TextFormField(
                   decoration: InputDecoration(
                       labelText: FlutterI18n.translate(context, 'ui.value')),
                   initialValue: tichu.id == null ? '' : tichu.value.toString(),
                   validator: (value) {
-                    if (value.isEmpty) {
+                    if (value?.isEmpty ?? true) {
                       return FlutterI18n.translate(
                           context, 'ui.errors.provide_value');
                     }
-                    try {
-                      int.parse(value);
-                    } catch (e) {
+                    if (int.tryParse(value ?? 'asdf') == null) {
                       return FlutterI18n.translate(
                           context, 'ui.errors.full_numbers_only');
                     }
@@ -141,34 +139,32 @@ class _TichuFormState extends State<_TichuForm> {
                   },
                   keyboardType: TextInputType.number,
                   onSaved: (val) => setState(() {
-                    tichu.value = int.parse(val);
+                    tichu.value = int.parse(val as String);
                   }),
                 )
               ],
             ),
           ),
         ),
-        ButtonTheme.bar(
-          child: ButtonBar(
-            children: <Widget>[
-              TextButton(
-                child: Text(
-                  FlutterI18n.translate(context, 'ui.cancel').toUpperCase(),
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.secondary),
-                ),
-                onPressed: () => Navigator.of(context).pop(null),
+        ButtonBar(
+          children: <Widget>[
+            TextButton(
+              child: Text(
+                FlutterI18n.translate(context, 'ui.cancel').toUpperCase(),
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
               ),
-              TextButton(
-                child: Text(
-                  FlutterI18n.translate(context, 'ui.save').toUpperCase(),
-                  style: TextStyle(color: Colors.greenAccent[400]),
-                ),
-                onPressed: () => _save(),
+              onPressed: () => Navigator.of(context).pop(null),
+            ),
+            TextButton(
+              child: Text(
+                FlutterI18n.translate(context, 'ui.save').toUpperCase(),
+                style: TextStyle(color: Colors.greenAccent[400]),
               ),
-            ],
-          ),
-        )
+              onPressed: () => _save(),
+            ),
+          ],
+        ),
       ],
     );
   }

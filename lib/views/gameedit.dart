@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 
 import 'package:tichumate/components/gameform.dart';
+import 'package:tichumate/models.dart';
 import 'package:tichumate/utils/gamemanager.dart';
 import 'package:tichumate/views/game.dart';
 import 'package:tichumate/components/teamform.dart';
@@ -9,7 +10,8 @@ import 'package:tichumate/components/teamform.dart';
 class GameEditView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final GameViewArguments args = ModalRoute.of(context).settings.arguments;
+    final GameViewArguments args =
+        ModalRoute.of(context)?.settings.arguments as GameViewArguments;
     return _GameEditView(
       gameId: args.gameId,
     );
@@ -33,7 +35,7 @@ class _GameEditViewState extends State<_GameEditView> {
       _team2FormKey = GlobalKey<FormState>(),
       _gameFormKey = GlobalKey<FormState>();
   bool _loaded = false;
-  GameManager _gm;
+  late GameManager _gm;
 
   _GameEditViewState({
     required this.gameId,
@@ -54,9 +56,9 @@ class _GameEditViewState extends State<_GameEditView> {
   }
 
   Future<void> _save() async {
-    _team1FormKey.currentState..save();
-    _team2FormKey.currentState..save();
-    _gameFormKey.currentState..save();
+    _team1FormKey.currentState?..save();
+    _team2FormKey.currentState?..save();
+    _gameFormKey.currentState?..save();
     await _gm.save();
     Navigator.of(context).pop();
   }
@@ -82,11 +84,12 @@ class _GameEditViewState extends State<_GameEditView> {
                   formKey: _team1FormKey,
                   team: _gm.team1.team,
                   teamNameCallback: (name) {
-                    _gm.team1.team.name = name;
+                    _gm.team1.team.name = name as String;
                   },
                   playersCallback: (players) {
-                    _gm.team1.team.players = players;
+                    _gm.team1.team.players = players as List<Player>;
                   },
+                  secondaryPlayers: [],
                 ),
               ),
               Container(
@@ -105,11 +108,12 @@ class _GameEditViewState extends State<_GameEditView> {
                   formKey: _team2FormKey,
                   team: _gm.team2.team,
                   teamNameCallback: (name) {
-                    _gm.team2.team.name = name;
+                    _gm.team2.team.name = name as String;
                   },
                   playersCallback: (players) {
-                    _gm.team2.team.players = players;
+                    _gm.team2.team.players = players as List<Player>;
                   },
+                  secondaryPlayers: [],
                 ),
               ),
               Container(
@@ -127,10 +131,10 @@ class _GameEditViewState extends State<_GameEditView> {
                   formKey: _gameFormKey,
                   game: _gm.game,
                   ruleCallback: (rule) {
-                    _gm.game.rule = rule;
+                    _gm.game.rule = rule as String;
                   },
                   winScoreCallback: (score) {
-                    _gm.game.winScore = score;
+                    _gm.game.winScore = score as int;
                   },
                 ),
               ),
@@ -142,14 +146,21 @@ class _GameEditViewState extends State<_GameEditView> {
             height: 56,
             child: Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
               TextButton(
-                textColor: Theme.of(context).colorScheme.secondary,
+                style: ButtonStyle(
+                  foregroundColor: MaterialStatePropertyAll(
+                      Theme.of(context).colorScheme.secondary),
+                ),
                 child: Text(
                     FlutterI18n.translate(context, 'ui.cancel').toUpperCase()),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               Spacer(),
               TextButton(
-                textColor: Colors.green[500],
+                style: ButtonStyle(
+                  foregroundColor: MaterialStatePropertyAll(
+                    Color.fromRGBO(76, 175, 80, 1),
+                  ),
+                ),
                 child: Text(
                     FlutterI18n.translate(context, 'ui.save').toUpperCase()),
                 onPressed: () => _save(),

@@ -168,12 +168,15 @@ class _GameViewContentState extends State<_GameViewContent> with RouteAware {
                     itemCount: _gm.rounds.length,
                     itemBuilder: (context, index) => _RoundListTile(
                       key: UniqueKey(),
-                      onDelete: () => _removeRound(_gm.rounds[index].id),
+                      onDelete: () => _removeRound(_gm.rounds[index].id as int),
                       onEdit: () {
-                        Navigator.of(context).pushNamed('/round',
-                            arguments: RoundViewArguments(
-                                gameId: _gameId,
-                                roundId: _gm.rounds[index].id));
+                        Navigator.of(context).pushNamed(
+                          '/round',
+                          arguments: RoundViewArguments(
+                            gameId: _gameId,
+                            roundId: _gm.rounds[index].id as int,
+                          ),
+                        );
                       },
                       confirmDelete: () async {
                         return true;
@@ -347,13 +350,13 @@ class _ScoreSummary extends StatelessWidget {
     ));
     var callsColumn = <Widget>[];
     score.calls.forEach((call) {
-      var tichu = TichuDB().tichus.getFromCache(call.tichuId);
-      var title = tichu.lang.isEmpty
-          ? tichu.short
-          : FlutterI18n.translate(context, tichu.lang + '.short');
+      var tichu = TichuDB().tichus.getFromCache(call.tichuId as int);
+      var title = tichu?.lang.isEmpty ?? true
+          ? tichu?.short
+          : FlutterI18n.translate(context, tichu!.lang + '.short');
       callsColumn.add(Container(
         padding: EdgeInsets.symmetric(horizontal: 4),
-        child: Text(title,
+        child: Text(title ?? '',
             style: TextStyle(
                 fontSize: 20,
                 color: call.success ? Colors.green[500] : Colors.red[500])),
@@ -564,13 +567,13 @@ class __ScoreChartState extends State<_ScoreChart> {
                     fontSize: 18,
                     color: scoreColor)))));
     var calls = data.calls.map((c) {
-      var tichu = TichuDB().tichus.getFromCache(c.tichuId);
-      var title = tichu.lang.isEmpty
-          ? tichu.short
-          : FlutterI18n.translate(context, tichu.lang + '.short');
+      var tichu = TichuDB().tichus.getFromCache(c.tichuId as int);
+      var title = tichu?.lang.isEmpty ?? true
+          ? tichu?.short
+          : FlutterI18n.translate(context, tichu!.lang + '.short');
       return Container(
           padding: EdgeInsets.symmetric(horizontal: 6),
-          child: Text(title,
+          child: Text(title ?? '',
               style: TextStyle(
                   color: c.success ? Colors.green[500] : Colors.red[500],
                   fontSize: 16)));

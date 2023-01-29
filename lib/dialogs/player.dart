@@ -9,7 +9,7 @@ class PlayerDialog {
   final BuildContext context;
   PlayerDialog(this.context);
 
-  Future<Player> newPlayer() async {
+  Future<Player?> newPlayer() async {
     var newPlayer = await _showEditDialog(Player());
     return newPlayer.id == null ? null : newPlayer;
   }
@@ -25,8 +25,8 @@ class PlayerDialog {
     var shouldDelete = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(FlutterI18n.translate(
-            context, 'ui.delete_target', {'target': player.name})),
+        title: Text(FlutterI18n.translate(context, 'ui.delete_target',
+            translationParams: {'target': player.name})),
         content:
             Text(FlutterI18n.translate(context, 'ui.this_cannot_be_undone')),
         actions: <Widget>[
@@ -49,14 +49,14 @@ class PlayerDialog {
         ],
       ),
     );
-    if (shouldDelete) {
+    if (shouldDelete ?? false) {
       return await TichuDB().players.deleteFromId(id);
     }
     return false;
   }
 
-  Future<Player> selectPlayer(List<Player> exclude,
-      {List<Player> secondary}) async {
+  Future<Player?> selectPlayer(List<Player> exclude,
+      {List<Player>? secondary}) async {
     var players = List<Player>.from(TichuDB().players.players);
     if (exclude != null) {
       players.removeWhere((player) => exclude.any((p) => p.id == player.id));
@@ -139,8 +139,8 @@ class _PlayerFormState extends State<_PlayerForm> {
 
   void _save() {
     final form = _formKey.currentState;
-    if (form.validate()) {
-      form.save();
+    if (form?.validate() ?? false) {
+      form!.save();
       Navigator.of(context).pop(player);
     }
   }
@@ -175,13 +175,14 @@ class _PlayerFormState extends State<_PlayerForm> {
                             context, 'player.player_name')),
                     initialValue: player.name,
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value?.isEmpty ?? true) {
                         return FlutterI18n.translate(
                             context, 'ui.errors.provide_name');
                       }
                       return null;
                     },
-                    onSaved: (val) => setState(() => player.name = val),
+                    onSaved: (val) =>
+                        setState(() => player.name = val as String),
                   ),
                 ),
                 Container(
@@ -199,7 +200,7 @@ class _PlayerFormState extends State<_PlayerForm> {
                         .toList(),
                     onChanged: (newValue) {
                       setState(() {
-                        player.icon = newValue;
+                        player.icon = newValue as String;
                       });
                     },
                   )),
@@ -208,8 +209,7 @@ class _PlayerFormState extends State<_PlayerForm> {
             ),
           ),
         ),
-        ButtonTheme.bar(
-            child: ButtonBar(
+        ButtonBar(
           children: <Widget>[
             TextButton(
               child: Text(
@@ -227,7 +227,7 @@ class _PlayerFormState extends State<_PlayerForm> {
               onPressed: () => _save(),
             ),
           ],
-        ))
+        )
       ],
     );
   }
